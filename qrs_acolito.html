@@ -1,0 +1,1439 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quero ser Acólito — N. Sra. dos Navegantes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cinzel+Decorative:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --azul-noite:   #07101e;
+      --azul-medio:   #0d1f38;
+      --azul-claro:   #162d52;
+      --ouro:         #c9a84c;
+      --ouro-claro:   #e8cc7a;
+      --ouro-brilho:  #fff0b0;
+      --pergaminho:   #f5f0e8;
+      --vinho:        #6b1a2c;
+      --vinho-claro:  #8c2240;
+      --branco:       #ffffff;
+      --cinza-claro:  #c8cdd8;
+      --cinza:        #8892a0;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      min-height: 100vh;
+      background: var(--azul-noite);
+      font-family: 'Inter', sans-serif;
+      color: var(--pergaminho);
+      overflow-x: hidden;
+    }
+
+    /* ─── CANVAS DE PARTÍCULAS ─── */
+    #particles-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ─── FUNDO COM GRADIENTE ─── */
+    .bg-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse 70% 50% at 50% -10%, rgba(201,168,76,0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 40% at 10% 80%, rgba(107,26,44,0.18) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 90% 80%, rgba(13,31,56,0.5) 0%, transparent 60%),
+        linear-gradient(180deg, #07101e 0%, #0d1f38 50%, #07101e 100%);
+    }
+
+    /* ─── ORNAMENTO SUPERIOR ─── */
+    .border-top {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, var(--ouro), var(--ouro-brilho), var(--ouro), transparent);
+      z-index: 100;
+    }
+
+    /* ─── HEADER ─── */
+    header {
+      position: relative;
+      z-index: 10;
+      padding: 60px 20px 40px;
+      text-align: center;
+    }
+
+    /* Cruz ornamental SVG inline */
+    .header-cross {
+      display: block;
+      margin: 0 auto 24px;
+      width: 54px;
+      height: 54px;
+      filter: drop-shadow(0 0 18px rgba(201,168,76,0.7));
+      animation: crossPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes crossPulse {
+      0%, 100% { filter: drop-shadow(0 0 14px rgba(201,168,76,0.6)); }
+      50%       { filter: drop-shadow(0 0 28px rgba(232,204,122,0.95)); }
+    }
+
+    .header-eyebrow {
+      font-family: 'Cinzel', serif;
+      font-size: 0.7rem;
+      font-weight: 400;
+      letter-spacing: 0.35em;
+      color: var(--ouro);
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      opacity: 0.85;
+    }
+
+    header h1 {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(2.2rem, 6vw, 4rem);
+      font-weight: 700;
+      color: transparent;
+      background: linear-gradient(135deg, var(--ouro) 0%, var(--ouro-brilho) 40%, var(--ouro) 70%, var(--ouro-claro) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      letter-spacing: 0.06em;
+      line-height: 1.15;
+      text-shadow: none;
+      margin-bottom: 8px;
+    }
+
+    .header-subtitle {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(0.75rem, 2vw, 0.9rem);
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      color: var(--cinza-claro);
+      opacity: 0.7;
+      margin-bottom: 32px;
+    }
+
+    /* Divisor ornamental */
+    .ornament-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin: 0 auto 30px;
+      max-width: 480px;
+    }
+
+    .ornament-divider .line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--ouro), transparent);
+    }
+
+    .ornament-divider .diamond {
+      width: 8px;
+      height: 8px;
+      background: var(--ouro);
+      transform: rotate(45deg);
+      flex-shrink: 0;
+    }
+
+    .ornament-divider .diamond-sm {
+      width: 4px;
+      height: 4px;
+      background: var(--ouro-claro);
+      transform: rotate(45deg);
+      flex-shrink: 0;
+    }
+
+    /* Navegação */
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      font-family: 'Cinzel', serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--cinza-claro);
+      padding: 10px 22px;
+      border: 1px solid rgba(201,168,76,0.25);
+      border-radius: 2px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    nav a::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(201,168,76,0.08), rgba(201,168,76,0.02));
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    nav a:hover {
+      color: var(--ouro-brilho);
+      border-color: var(--ouro);
+      box-shadow: 0 0 20px rgba(201,168,76,0.2), inset 0 0 20px rgba(201,168,76,0.05);
+    }
+
+    nav a:hover::before { opacity: 1; }
+
+    /* ─── CARDS ─── */
+    main {
+      position: relative;
+      z-index: 10;
+      padding: 20px 20px 60px;
+    }
+
+    .section-label {
+      text-align: center;
+      font-family: 'Cinzel', serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.4em;
+      color: var(--ouro);
+      text-transform: uppercase;
+      margin-bottom: 40px;
+      opacity: 0.8;
+    }
+
+    /* ============================================================
+       NOVO — APRESENTAÇÃO / INTRODUÇÃO
+    ============================================================ */
+    .intro-section {
+      max-width: 760px;
+      margin: 10px auto 70px;
+      padding: 0 20px;
+      text-align: center;
+    }
+
+    .intro-title {
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      font-size: clamp(1.5rem, 3.2vw, 2.1rem);
+      color: var(--ouro-claro);
+      letter-spacing: 0.04em;
+      margin: 14px 0 22px;
+    }
+
+    .intro-text {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      line-height: 1.9;
+      color: var(--cinza-claro);
+      opacity: 0.92;
+    }
+
+    .intro-section .ornament-divider {
+      margin-top: 32px;
+      margin-bottom: 0;
+    }
+
+    /* ============================================================
+       NOVO — PERGUNTAS FREQUENTES (FAQ / ACCORDION)
+    ============================================================ */
+    .faq-section {
+      max-width: 900px;
+      margin: 0 auto 90px;
+      padding: 0 20px;
+    }
+
+    .faq-container {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .faq-item {
+      position: relative;
+      background: linear-gradient(160deg, rgba(13,31,56,0.95) 0%, rgba(22,45,82,0.85) 100%);
+      border: 1px solid rgba(201,168,76,0.25);
+      border-radius: 4px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.35);
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      opacity: 0;
+      transform: translateY(16px);
+      animation: faqIn 0.5s ease forwards;
+    }
+
+    @keyframes faqIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .faq-item::before,
+    .faq-item::after {
+      content: '';
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-color: var(--ouro);
+      border-style: solid;
+      opacity: 0.35;
+      transition: opacity 0.3s ease;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .faq-item::before { top: 5px; left: 5px; border-width: 1px 0 0 1px; }
+    .faq-item::after  { bottom: 5px; right: 5px; border-width: 0 1px 1px 0; }
+
+    .faq-item:hover,
+    .faq-item.active {
+      border-color: rgba(201,168,76,0.55);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.45), 0 0 20px rgba(201,168,76,0.08);
+    }
+
+    .faq-item:hover::before, .faq-item:hover::after,
+    .faq-item.active::before, .faq-item.active::after { opacity: 0.8; }
+
+    .faq-question-wrap { margin: 0; }
+
+    .faq-question {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 22px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      text-align: left;
+      font-family: 'Cinzel', serif;
+      font-size: 0.88rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: var(--ouro-claro);
+      transition: color 0.25s ease, background 0.25s ease;
+    }
+
+    .faq-question:hover {
+      background: rgba(201,168,76,0.06);
+      color: var(--ouro-brilho);
+    }
+
+    .faq-icon {
+      flex-shrink: 0;
+      width: 26px;
+      height: 26px;
+      border: 1px solid rgba(201,168,76,0.4);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--ouro);
+      line-height: 1;
+      transition: transform 0.35s cubic-bezier(.34,1.56,.64,1), background 0.3s ease, border-color 0.3s ease;
+    }
+
+    .faq-item.active .faq-icon {
+      transform: rotate(45deg);
+      background: rgba(201,168,76,0.15);
+      border-color: rgba(201,168,76,0.7);
+    }
+
+    .faq-answer {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.45s ease;
+    }
+
+    .faq-item.active .faq-answer { grid-template-rows: 1fr; }
+
+    .faq-answer-inner { overflow: hidden; }
+
+    .faq-answer-inner p {
+      padding: 0 22px 20px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.86rem;
+      line-height: 1.85;
+      color: var(--cinza-claro);
+      opacity: 0.9;
+    }
+
+    /* ============================================================
+       NOVO — GALERIA "NOSSA CAMINHADA" (CARROSSEL)
+    ============================================================ */
+    .gallery-section {
+      max-width: 1600px;
+      margin: 0 auto 90px;
+      padding: 0 20px;
+    }
+
+    .gallery-subtitle {
+      text-align: center;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      color: var(--cinza);
+      max-width: 560px;
+      margin: 0 auto 40px;
+      opacity: 0.85;
+    }
+
+    .carousel {
+      position: relative;
+      outline: none;
+    }
+
+    .carousel-viewport {
+      position: relative;
+      overflow: hidden;
+      border-radius: 6px;
+      border: 1px solid rgba(201,168,76,0.3);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.55), inset 0 1px 0 rgba(201,168,76,0.08);
+      background: rgba(7,16,30,0.6);
+    }
+
+    .carousel-track {
+      display: flex;
+      will-change: transform;
+    }
+
+    .carousel-slide,
+    .carousel-loading,
+    .gallery-msg {
+      aspect-ratio: 21 / 9;
+    }
+
+    .carousel-slide {
+      position: relative;
+      flex: 0 0 100%;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .carousel-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.7s ease, filter 0.5s ease;
+    }
+
+    .carousel-slide:hover img {
+      transform: scale(1.06);
+      filter: brightness(1.05) saturate(1.08);
+    }
+
+    .carousel-slide::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(7,16,30,0.85) 0%, rgba(7,16,30,0.1) 45%, transparent 68%);
+      opacity: 0.6;
+      transition: opacity 0.4s ease, box-shadow 0.4s ease;
+      pointer-events: none;
+    }
+
+    .carousel-slide:hover::after {
+      opacity: 0.92;
+      box-shadow: inset 0 0 90px rgba(201,168,76,0.25);
+    }
+
+    .carousel-caption {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      padding: 28px 36px;
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 0.45s ease, transform 0.45s ease;
+      pointer-events: none;
+    }
+
+    .carousel-slide:hover .carousel-caption {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .carousel-caption h3 {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1rem, 2.2vw, 1.4rem);
+      font-weight: 700;
+      color: var(--ouro-claro);
+      letter-spacing: 0.04em;
+      margin-bottom: 6px;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.8);
+    }
+
+    .carousel-caption p {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.82rem;
+      line-height: 1.6;
+      color: var(--cinza-claro);
+      max-width: 640px;
+      text-shadow: 0 1px 8px rgba(0,0,0,0.8);
+    }
+
+    .carousel-loading,
+    .gallery-msg {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      color: var(--cinza);
+    }
+
+    .carousel-spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid rgba(201,168,76,0.2);
+      border-top-color: var(--ouro);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .carousel-loading p,
+    .gallery-msg p {
+      font-family: 'Cinzel', serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+    }
+
+    .gallery-msg .icon { font-size: 2.2rem; opacity: 0.5; }
+
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: rgba(7,16,30,0.7);
+      border: 1px solid rgba(201,168,76,0.35);
+      color: var(--ouro-claro);
+      font-size: 1.3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      z-index: 5;
+      backdrop-filter: blur(4px);
+    }
+
+    .carousel-arrow:hover {
+      background: rgba(201,168,76,0.18);
+      border-color: rgba(201,168,76,0.7);
+      box-shadow: 0 0 20px rgba(201,168,76,0.3);
+    }
+
+    .carousel-arrow.prev { left: 16px; }
+    .carousel-arrow.next { right: 16px; }
+
+    .carousel-dots {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    .carousel-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: rgba(201,168,76,0.25);
+      border: 1px solid rgba(201,168,76,0.3);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      padding: 0;
+    }
+
+    .carousel-dot:hover { background: rgba(201,168,76,0.5); }
+
+    .carousel-dot.active {
+      background: var(--ouro);
+      box-shadow: 0 0 10px rgba(201,168,76,0.6);
+      transform: scale(1.2);
+    }
+
+    /* ============================================================
+       NOVO — CHAMADA FINAL (CTA)
+    ============================================================ */
+    .cta-section {
+      max-width: 700px;
+      margin: 0 auto 10px;
+      padding: 50px 20px 10px;
+      text-align: center;
+    }
+
+    .cta-section .ornament-divider { margin-bottom: 36px; }
+
+    .cta-title {
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      font-size: clamp(1.5rem, 3.6vw, 2.3rem);
+      letter-spacing: 0.03em;
+      line-height: 1.3;
+      margin-bottom: 18px;
+      color: transparent;
+      background: linear-gradient(135deg, var(--ouro) 0%, var(--ouro-brilho) 40%, var(--ouro) 70%, var(--ouro-claro) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+
+    .cta-text {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.92rem;
+      line-height: 1.85;
+      color: var(--cinza-claro);
+      max-width: 520px;
+      margin: 0 auto 34px;
+      opacity: 0.92;
+    }
+
+    .cta-btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.7rem;
+      overflow: hidden;
+      background: linear-gradient(135deg, var(--ouro) 0%, var(--ouro-claro) 100%);
+      color: var(--azul-noite);
+      font-family: 'Cinzel', serif;
+      font-size: 0.92rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 1.1rem 2.6rem;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 6px 26px rgba(201,168,76,0.35);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      animation: ctaPulse 3.2s ease-in-out infinite;
+    }
+
+    @keyframes ctaPulse {
+      0%, 100% { box-shadow: 0 6px 26px rgba(201,168,76,0.3); }
+      50%      { box-shadow: 0 10px 40px rgba(201,168,76,0.55); }
+    }
+
+    .cta-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 46px rgba(201,168,76,0.55);
+    }
+
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(7,16,30,0.35);
+      transform: scale(0);
+      animation: rippleAnim 0.6s ease-out;
+      pointer-events: none;
+    }
+
+    @keyframes rippleAnim {
+      to { transform: scale(2.6); opacity: 0; }
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      position: relative;
+      z-index: 10;
+      background: linear-gradient(180deg, transparent 0%, rgba(4,8,16,0.8) 30%, #040810 100%);
+      border-top: 1px solid rgba(201,168,76,0.2);
+      padding: 0 20px;
+    }
+
+    .footer-ornament {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      padding: 32px 20px 0;
+      margin-bottom: 40px;
+    }
+
+    .footer-ornament .line {
+      flex: 1;
+      max-width: 200px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(201,168,76,0.4));
+    }
+
+    .footer-ornament .line.right {
+      background: linear-gradient(90deg, rgba(201,168,76,0.4), transparent);
+    }
+
+    .footer-cross-sm {
+      width: 36px;
+      height: 36px;
+      filter: drop-shadow(0 0 12px rgba(201,168,76,0.5));
+    }
+
+    .footer-grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.6fr 1fr 1fr;
+      gap: 48px;
+      padding-bottom: 40px;
+    }
+
+    .footer-col h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--ouro);
+      margin-bottom: 18px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(201,168,76,0.2);
+    }
+
+    .footer-col p,
+    .footer-col address {
+      font-size: 0.84rem;
+      font-style: normal;
+      line-height: 1.9;
+      color: var(--cinza);
+    }
+
+    .footer-col address span {
+      display: block;
+    }
+
+    .footer-col ul {
+      list-style: none;
+    }
+
+    .footer-col ul li {
+      margin-bottom: 10px;
+    }
+
+    .footer-col ul li a {
+      font-size: 0.84rem;
+      color: var(--cinza);
+      text-decoration: none;
+      transition: color 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .footer-col ul li a::before {
+      content: '›';
+      color: var(--ouro);
+      font-size: 1rem;
+      opacity: 0.6;
+    }
+
+    .footer-col ul li a:hover {
+      color: var(--ouro-claro);
+    }
+
+    .horarios {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .horario-item {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      color: var(--cinza);
+      padding-bottom: 6px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .horario-item .dia {
+      color: var(--cinza-claro);
+      font-weight: 500;
+    }
+
+    .horario-item .hora {
+      color: var(--ouro);
+      opacity: 0.8;
+    }
+
+    .footer-bottom {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 20px 0 28px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .footer-bottom p {
+      font-size: 0.75rem;
+      color: var(--cinza);
+      opacity: 0.65;
+      letter-spacing: 0.05em;
+    }
+
+    .footer-bottom p span {
+      color: var(--ouro);
+      opacity: 1;
+    }
+
+    .footer-bottom-right {
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      color: var(--ouro);
+      opacity: 0.45;
+      text-transform: uppercase;
+    }
+
+    /* ─── RESPONSIVO ─── */
+    @media (max-width: 768px) {
+      header { padding: 50px 16px 30px; }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .intro-section { margin-bottom: 56px; }
+
+      .faq-section { margin-bottom: 64px; }
+
+      .faq-question {
+        padding: 15px 18px;
+        font-size: 0.82rem;
+      }
+
+      .gallery-section { margin-bottom: 64px; }
+
+      .carousel-slide,
+      .carousel-loading,
+      .gallery-msg {
+        aspect-ratio: 4 / 5;
+      }
+
+      .carousel-caption { padding: 20px 22px; }
+
+      .carousel-arrow {
+        width: 38px;
+        height: 38px;
+        font-size: 1.1rem;
+      }
+
+      .carousel-arrow.prev { left: 10px; }
+      .carousel-arrow.next { right: 10px; }
+
+      .cta-section { padding: 40px 20px 10px; }
+    }
+
+    @media (max-width: 480px) {
+      header h1 { font-size: 2rem; }
+      nav a { font-size: 0.7rem; padding: 8px 14px; }
+
+      .carousel-slide,
+      .carousel-loading,
+      .gallery-msg {
+        aspect-ratio: 3 / 4;
+      }
+
+      .carousel-caption { padding: 16px 18px; }
+      .carousel-caption h3 { font-size: 1rem; }
+      .carousel-caption p { display: none; }
+
+      .cta-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 1rem 1.6rem;
+      }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Faixa dourada superior -->
+  <div class="border-top"></div>
+
+  <!-- Fundo gradiente fixo -->
+  <div class="bg-overlay"></div>
+
+  <!-- Canvas de partículas -->
+  <canvas id="particles-canvas"></canvas>
+
+  <!-- ═══════════════════════════ HEADER ═══════════════════════════ -->
+  <header>
+    <!-- Cruz SVG ornamental -->
+    <svg class="header-cross" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="crossGrad" x1="0" y1="0" x2="54" y2="54" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#e8cc7a"/>
+          <stop offset="50%" stop-color="#c9a84c"/>
+          <stop offset="100%" stop-color="#e8cc7a"/>
+        </linearGradient>
+      </defs>
+      <!-- Braço vertical -->
+      <rect x="22" y="2" width="10" height="50" rx="2" fill="url(#crossGrad)"/>
+      <!-- Braço horizontal -->
+      <rect x="2" y="16" width="50" height="10" rx="2" fill="url(#crossGrad)"/>
+      <!-- Joinha central -->
+      <rect x="20" y="14" width="14" height="14" rx="2" fill="#fff0b0" opacity="0.5"/>
+      <!-- Ornamento: losangos nos extremos -->
+      <rect x="24" y="0" width="6" height="6" rx="1" transform="rotate(45 27 3)" fill="#fff0b0" opacity="0.8"/>
+      <rect x="24" y="48" width="6" height="6" rx="1" transform="rotate(45 27 51)" fill="#fff0b0" opacity="0.6"/>
+      <rect x="0" y="18" width="6" height="6" rx="1" transform="rotate(45 3 21)" fill="#fff0b0" opacity="0.6"/>
+      <rect x="48" y="18" width="6" height="6" rx="1" transform="rotate(45 51 21)" fill="#fff0b0" opacity="0.6"/>
+    </svg>
+
+    <p class="header-eyebrow">Comunidade Nossa Senhora dos Navegantes</p>
+
+    <h1>Acólitos</h1>
+
+    <p class="header-subtitle">Contigo estaremos &middot; Por vós Serviremos </p>
+
+    <div class="ornament-divider">
+      <div class="line"></div>
+      <div class="diamond-sm diamond"></div>
+      <div class="diamond"></div>
+      <div class="diamond-sm diamond"></div>
+      <div class="line"></div>
+    </div>
+
+    <nav>
+      <a href="eventos.html">Inicio</a>
+      <a href="biblioteca.html">Biblioteca</a>
+      <a href="#">Quero ser Acólito</a>
+      <a href="acólitosNav.html">Membros</a>
+      <a href="#">Contatos</a>
+    </nav>
+  </header>
+
+  <!-- ═══════════════════════════ MAIN ═══════════════════════════ -->
+  <main>
+    <section class="intro-section">
+      <p class="section-label">Um Convite ao Serviço</p>
+      <h2 class="intro-title">Servir ao Altar</h2>
+      <p class="intro-text">
+        Servir ao altar é uma das formas mais bonitas de viver a fé de perto. É colocar as mãos, os passos e, principalmente, o coração a serviço da liturgia, ajudando a Igreja a celebrar os mistérios de Deus com beleza, ordem e reverência. O Acólito caminha ao lado do sacerdote, cuida dos objetos sagrados e aprende, celebração após celebração, a ser um verdadeiro servo do altar do Senhor. Se você sente esse chamado no coração, este é o momento de conhecer um pouco mais sobre esse caminho de fé, amizade e serviço.
+      </p>
+      <div class="ornament-divider">
+        <div class="line"></div>
+        <div class="diamond-sm diamond"></div>
+        <div class="diamond"></div>
+        <div class="diamond-sm diamond"></div>
+        <div class="line"></div>
+      </div>
+    </section>
+
+    <section class="faq-section" id="faq">
+      <p class="section-label">Perguntas Frequentes</p>
+      <div class="faq-container" id="faq-container"></div>
+    </section>
+
+    <section class="gallery-section" id="galeria">
+      <p class="section-label">Nossa Caminhada</p>
+      <p class="gallery-subtitle">Registros de encontros, celebrações e momentos marcantes da nossa comunidade de Acólitos.</p>
+
+      <div class="carousel" id="carousel" aria-roledescription="carrossel" aria-label="Galeria de fotos — Nossa Caminhada" tabindex="0">
+        <div class="carousel-viewport" id="carousel-viewport">
+          <div class="carousel-loading" id="carousel-loading">
+            <span class="carousel-spinner"></span>
+            <p>Carregando galeria…</p>
+          </div>
+          <div class="carousel-track" id="carousel-track"></div>
+        </div>
+
+        <button class="carousel-arrow prev" id="carousel-prev" aria-label="Slide anterior" type="button">‹</button>
+        <button class="carousel-arrow next" id="carousel-next" aria-label="Próximo slide" type="button">›</button>
+
+        <div class="carousel-dots" id="carousel-dots"></div>
+      </div>
+    </section>
+
+    <section class="cta-section">
+      <div class="ornament-divider">
+        <div class="line"></div>
+        <div class="diamond-sm diamond"></div>
+        <div class="diamond"></div>
+        <div class="diamond-sm diamond"></div>
+        <div class="line"></div>
+      </div>
+      <h2 class="cta-title">Está pronto para servir ao altar?</h2>
+      <p class="cta-text">Junte-se a nós nessa caminhada de fé, aprendizado e serviço. Você não precisa saber tudo agora — só precisa de um coração disposto a responder ao chamado de Deus. Dê o primeiro passo hoje.</p>
+      <a href="contatos.html" class="cta-btn" id="cta-btn">Quero ser Acólito</a>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-ornament">
+      <div class="line"></div>
+      <svg class="footer-cross-sm" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="14" y="2" width="8" height="32" rx="2" fill="#c9a84c" opacity="0.7"/>
+        <rect x="2" y="10" width="32" height="8" rx="2" fill="#c9a84c" opacity="0.7"/>
+      </svg>
+      <div class="line right"></div>
+    </div>
+
+    <div class="footer-grid">
+
+      <div class="footer-col">
+        <h3>Nossa Comunidade</h3>
+        <p>Os Acólitos são jovens dedicados ao serviço do altar, auxiliando nas celebrações litúrgicas e vivendo a fé com alegria e comprometimento.</p>
+        <br>
+        <address>
+          <span>Comunidade Nossa Senhora dos Navegantes</span>
+          <span>Espinheiros - Joinville — Santa Catarina</span>
+          <span>Brasil</span>
+        </address>
+      </div>
+
+      <div class="footer-col">
+        <h3>Links Úteis</h3>
+        <ul>
+          <li><a href="#">Início</a></li>
+          <li><a href="#">Membros</a></li>
+          <li><a href="#">Eventos e Missas</a></li>
+          <li><a href="#">Galeria de Fotos</a></li>
+          <li><a href="#">Contato</a></li>
+          <li><a href="#">Quero ser Acólito</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h3>Horários</h3>
+        <div class="horarios">
+          <div class="horario-item">
+            <span class="dia">Domingo</span>
+            <span class="hora"></span>
+          </div>
+          <div class="horario-item">
+            <span class="dia">Segunda (Encontro)</span>
+            <span class="hora">19:30</span>
+          </div>
+          <div class="horario-item">
+            <span class="dia">Quarta</span>
+            <span class="hora"></span>
+          </div>
+          <div class="horario-item">
+            <span class="dia">Sexta</span>
+            <span class="hora"></span>
+          </div>
+          <div class="horario-item">
+            <span class="dia">Sábado (Santa Missa)</span>
+            <span class="hora">19:30h</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2026 Acólitos — N. Sra. dos Navegantes &nbsp;·&nbsp; <span>Joinville, SC</span></p>
+      <p class="footer-bottom-right">Ad Maiorem Dei Gloriam</p>
+    </div>
+  </footer>
+
+  <!-- ═══════════════════════════ SCRIPTS ═══════════════════════════ -->
+  <script>
+    /* ── Partículas flutuantes ── */
+    (function () {
+      const canvas = document.getElementById('particles-canvas');
+      const ctx = canvas.getContext('2d');
+      let W, H, particles = [];
+
+      function resize() {
+        W = canvas.width = window.innerWidth;
+        H = canvas.height = window.innerHeight;
+      }
+
+      function randomBetween(a, b) { return a + Math.random() * (b - a); }
+
+      function createParticle() {
+        return {
+          x: randomBetween(0, W),
+          y: randomBetween(0, H),
+          r: randomBetween(0.4, 1.6),
+          vx: randomBetween(-0.12, 0.12),
+          vy: randomBetween(-0.25, -0.06),
+          alpha: randomBetween(0.1, 0.55),
+          fadeDir: Math.random() > 0.5 ? 1 : -1,
+          fadeSpeed: randomBetween(0.002, 0.006),
+          hue: randomBetween(40, 55)
+        };
+      }
+
+      function init() {
+        resize();
+        particles = [];
+        const count = Math.floor((W * H) / 8000);
+        for (let i = 0; i < count; i++) particles.push(createParticle());
+        window.addEventListener('resize', resize);
+      }
+
+      function tick() {
+        ctx.clearRect(0, 0, W, H);
+        particles.forEach((p, i) => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.alpha += p.fadeDir * p.fadeSpeed;
+          if (p.alpha <= 0.05 || p.alpha >= 0.6) p.fadeDir *= -1;
+          if (p.y < -4) { particles[i] = createParticle(); particles[i].y = H + 4; }
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = `hsla(${p.hue}, 80%, 70%, ${p.alpha})`;
+          ctx.fill();
+        });
+        requestAnimationFrame(tick);
+      }
+
+      init();
+      tick();
+    })();
+
+    /* ── API e cards ── */
+    const apiUrl = "https://script.google.com/macros/s/AKfycbywLlfwXr7K6Tcb5Unsy_9EJrdUA_me_yO59s6egaPiT4cCsA_CrJ1bgTG9Y6ATjANKcg/exec";
+
+    /* ==============================================================
+       PERGUNTAS FREQUENTES — DADOS
+    ============================================================== */
+    const perguntasFrequentes = [
+      {
+        pergunta: "O que faz um Acólito?",
+        resposta: "O Acólito é aquele que serve diretamente ao altar durante as celebrações litúrgicas. Ele auxilia o sacerdote, cuida da cruz processional, das velas, do turíbulo, da naveta e do missal, e ajuda a preparar tudo com zelo para que a Santa Missa aconteça com beleza, ordem e profundo respeito. É um serviço que aproxima o coração do jovem dos mistérios mais sagrados da nossa fé."
+      },
+      {
+        pergunta: "Quem pode participar?",
+        resposta: "Todo jovem e toda criança da nossa comunidade que sinta o desejo de servir a Deus pode fazer parte do grupo de Acólitos. Não é preciso ter experiência anterior, pertencer a nenhuma pastoral específica ou já conhecer a liturgia — basta ter vontade de aprender e um coração disposto a servir com alegria."
+      },
+      {
+        pergunta: "Preciso já saber servir?",
+        resposta: "De jeito nenhum! Ninguém chega sabendo tudo — todos os nossos acólitos, inclusive os mais experientes, começaram exatamente como você está começando agora. A formação existe justamente para te ensinar, com calma e carinho, cada gesto e cada detalhe do serviço ao altar."
+      },
+      {
+        pergunta: "Como funciona a formação?",
+        resposta: "A formação acontece em encontros semanais, reunindo momentos de ensino sobre a liturgia, ensaios práticos com os objetos sagrados e momentos de oração e convivência fraterna. Os acólitos mais experientes acompanham de perto os iniciantes, tornando o aprendizado leve, acolhedor e cheio de significado."
+      },
+      {
+        pergunta: "Quanto tempo demora para começar a servir?",
+        resposta: "O ritmo é individual, respeitando o tempo de cada um. De modo geral, após algumas semanas de formação e ensaios já é possível acompanhar as primeiras celebrações ao lado de um acólito mais experiente, servindo aos poucos e com toda a segurança, até ganhar autonomia completa."
+      },
+      {
+        pergunta: "Em quais dias acontecem os encontros?",
+        resposta: "Nosso encontro de formação acontece às segundas-feiras, às 19h30. Além disso, os acólitos têm a oportunidade de servir e praticar durante as celebrações de sábado e domingo, sempre de acordo com a disponibilidade de cada um."
+      },
+      {
+        pergunta: "Preciso participar de todas as Missas?",
+        resposta: "Não! Sabemos que cada jovem tem seus estudos, trabalho e outros compromissos. Por isso, organizamos uma escala de serviço que respeita a disponibilidade de cada acólito, permitindo conciliar o serviço ao altar com a rotina do dia a dia."
+      },
+      {
+        pergunta: "Existe idade mínima?",
+        resposta: "De modo geral, acolhemos crianças e jovens que já tenham feito a Primeira Eucaristia, mas cada situação é acolhida com carinho e atenção individual. Se você tem essa dúvida, fale com a gente — teremos alegria em te orientar sobre o melhor momento para começar."
+      },
+      {
+        pergunta: "O que vou aprender durante a formação?",
+        resposta: "Você vai aprender sobre o significado de cada objeto litúrgico — a cruz, a vela, o turíbulo, a naveta e o missal —, as posturas e os gestos corretos, e a estrutura da Santa Missa. Mais do que isso, vai crescer em espiritualidade, disciplina e vida de oração, preparando-se para servir com o coração, não apenas com as mãos."
+      },
+      {
+        pergunta: "Como faço minha inscrição?",
+        resposta: "É bem simples! Basta clicar no botão \"Quero ser Acólito\" logo abaixo ou entrar em contato conosco através dos nossos canais de comunicação. Um de nossos coordenadores vai te acolher com alegria e explicar os próximos passos para você iniciar essa linda caminhada de serviço ao altar."
+      }
+    ];
+
+    /* ==============================================================
+       ACCORDION — FAQ
+    ============================================================== */
+    function criarAccordion() {
+      const container = document.getElementById("faq-container");
+      if (!container) return;
+      container.innerHTML = "";
+
+      perguntasFrequentes.forEach((item, index) => {
+        const faqItem = document.createElement("div");
+        faqItem.className = "faq-item";
+        faqItem.style.animationDelay = `${index * 0.06}s`;
+
+        faqItem.innerHTML = `
+          <h3 class="faq-question-wrap">
+            <button class="faq-question" id="faq-q-${index}" aria-expanded="false" aria-controls="faq-a-${index}" type="button">
+              <span>${item.pergunta}</span>
+              <span class="faq-icon" aria-hidden="true">+</span>
+            </button>
+          </h3>
+          <div class="faq-answer" id="faq-a-${index}" role="region" aria-labelledby="faq-q-${index}">
+            <div class="faq-answer-inner">
+              <p>${item.resposta}</p>
+            </div>
+          </div>
+        `;
+
+        container.appendChild(faqItem);
+
+        faqItem.querySelector(".faq-question").addEventListener("click", () => abrirPergunta(faqItem));
+      });
+    }
+
+    function abrirPergunta(item) {
+      const jaEstavaAberto = item.classList.contains("active");
+
+      document.querySelectorAll(".faq-item.active").forEach(outro => {
+        outro.classList.remove("active");
+        outro.querySelector(".faq-question").setAttribute("aria-expanded", "false");
+      });
+
+      if (!jaEstavaAberto) {
+        item.classList.add("active");
+        item.querySelector(".faq-question").setAttribute("aria-expanded", "true");
+      }
+    }
+
+    /* ==============================================================
+       GALERIA — "NOSSA CAMINHADA"
+    ============================================================== */
+    let totalSlides   = 0;
+    let slideAtual    = 1;
+    let emTransicao   = false;
+    let autoplayTimer = null;
+    const AUTOPLAY_MS = 4500;
+
+    async function carregarGaleria() {
+      const track = document.getElementById("carousel-track");
+      if (!track) return;
+
+      try {
+        const response = await fetch(apiUrl);
+        const data     = await response.json();
+        const galeria  = data.galeria || [];
+
+        if (!galeria.length) {
+          mostrarGaleriaVazia();
+          return;
+        }
+
+        montarSlides(galeria);
+        iniciarCarousel();
+
+      } catch (error) {
+        console.error("Erro ao carregar a galeria:", error);
+        mostrarGaleriaErro();
+      }
+    }
+
+    function criarSlideHtml(item) {
+      const imagem    = item.imagem    || "";
+      const titulo    = item.titulo    || "";
+      const descricao = item.descricao || "";
+      return `
+        <div class="carousel-slide">
+          <img src="${imagem}" alt="${titulo}" loading="lazy">
+          <div class="carousel-caption">
+            <h3>${titulo}</h3>
+            ${descricao ? `<p>${descricao}</p>` : ""}
+          </div>
+        </div>
+      `;
+    }
+
+    function montarSlides(itens) {
+      const loading = document.getElementById("carousel-loading");
+      if (loading) loading.remove();
+
+      const track    = document.getElementById("carousel-track");
+      const dotsWrap = document.getElementById("carousel-dots");
+
+      totalSlides = itens.length;
+
+      const slidesHtml  = itens.map(criarSlideHtml).join("");
+      const cloneInicio = criarSlideHtml(itens[itens.length - 1]);
+      const cloneFim    = criarSlideHtml(itens[0]);
+
+      track.innerHTML = cloneInicio + slidesHtml + cloneFim;
+
+      dotsWrap.innerHTML = itens
+        .map((_, i) => `<button class="carousel-dot${i === 0 ? " active" : ""}" data-index="${i}" aria-label="Ir para o slide ${i + 1}" type="button"></button>`)
+        .join("");
+
+      slideAtual = 1;
+      posicionarCarousel(false);
+    }
+
+    function iniciarCarousel() {
+      const carousel = document.getElementById("carousel");
+      const track    = document.getElementById("carousel-track");
+      const btnPrev  = document.getElementById("carousel-prev");
+      const btnNext  = document.getElementById("carousel-next");
+      const dotsWrap = document.getElementById("carousel-dots");
+
+      btnNext.addEventListener("click", () => moverSlide(1));
+      btnPrev.addEventListener("click", () => moverSlide(-1));
+
+      dotsWrap.addEventListener("click", e => {
+        const dot = e.target.closest(".carousel-dot");
+        if (!dot) return;
+        irParaSlide(parseInt(dot.dataset.index, 10));
+      });
+
+      track.addEventListener("transitionend", () => {
+        emTransicao = false;
+        if (slideAtual === 0) {
+          slideAtual = totalSlides;
+          posicionarCarousel(false);
+        } else if (slideAtual === totalSlides + 1) {
+          slideAtual = 1;
+          posicionarCarousel(false);
+        }
+      });
+
+      carousel.addEventListener("mouseenter", pausarAutoplay);
+      carousel.addEventListener("mouseleave", ativarAutoplay);
+      carousel.addEventListener("focusin", pausarAutoplay);
+      carousel.addEventListener("focusout", ativarAutoplay);
+
+      carousel.addEventListener("keydown", e => {
+        if (e.key === "ArrowRight") moverSlide(1);
+        if (e.key === "ArrowLeft") moverSlide(-1);
+      });
+
+      ativarAutoplay();
+    }
+
+    function moverSlide(direcao) {
+      if (emTransicao || !totalSlides) return;
+      emTransicao = true;
+      slideAtual += direcao;
+      posicionarCarousel(true);
+    }
+
+    function irParaSlide(indice) {
+      if (emTransicao || Number.isNaN(indice) || !totalSlides) return;
+      emTransicao = true;
+      slideAtual = indice + 1;
+      posicionarCarousel(true);
+    }
+
+    function posicionarCarousel(animar) {
+      const track = document.getElementById("carousel-track");
+      track.style.transition = animar ? "transform .6s cubic-bezier(.25,.8,.25,1)" : "none";
+      track.style.transform  = `translateX(-${slideAtual * 100}%)`;
+      atualizarIndicadores();
+    }
+
+    function atualizarIndicadores() {
+      if (!totalSlides) return;
+      const indiceReal = ((slideAtual - 1) + totalSlides) % totalSlides;
+      document.querySelectorAll(".carousel-dot").forEach((dot, i) => {
+        dot.classList.toggle("active", i === indiceReal);
+      });
+    }
+
+    function ativarAutoplay() {
+      pausarAutoplay();
+      if (!totalSlides) return;
+      autoplayTimer = setInterval(() => moverSlide(1), AUTOPLAY_MS);
+    }
+
+    function pausarAutoplay() {
+      if (autoplayTimer) clearInterval(autoplayTimer);
+      autoplayTimer = null;
+    }
+
+    function mostrarGaleriaVazia() {
+      const viewport = document.getElementById("carousel-viewport");
+      if (viewport) {
+        viewport.innerHTML = `
+          <div class="gallery-msg">
+            <span class="icon">🕊️</span>
+            <p>Em breve, novos registros da nossa caminhada.</p>
+          </div>
+        `;
+      }
+      esconderControlesCarousel();
+    }
+
+    function mostrarGaleriaErro() {
+      const viewport = document.getElementById("carousel-viewport");
+      if (viewport) {
+        viewport.innerHTML = `
+          <div class="gallery-msg">
+            <span class="icon">⚠️</span>
+            <p>Não foi possível carregar as imagens da galeria.</p>
+          </div>
+        `;
+      }
+      esconderControlesCarousel();
+    }
+
+    function esconderControlesCarousel() {
+      const prev = document.getElementById("carousel-prev");
+      const next = document.getElementById("carousel-next");
+      const dots = document.getElementById("carousel-dots");
+      if (prev) prev.style.display = "none";
+      if (next) next.style.display = "none";
+      if (dots) dots.style.display = "none";
+    }
+
+    /* ==============================================================
+       BOTÃO "QUERO SER ACÓLITO" — EFEITO RIPPLE
+    ============================================================== */
+    function criarRipple(e) {
+      const btn = e.currentTarget;
+      const antigo = btn.querySelector(".ripple");
+      if (antigo) antigo.remove();
+
+      const rect     = btn.getBoundingClientRect();
+      const diametro = Math.max(rect.width, rect.height);
+      const raio     = diametro / 2;
+
+      const circulo = document.createElement("span");
+      circulo.className = "ripple";
+      circulo.style.width  = `${diametro}px`;
+      circulo.style.height = `${diametro}px`;
+      circulo.style.left   = `${e.clientX - rect.left - raio}px`;
+      circulo.style.top    = `${e.clientY - rect.top - raio}px`;
+
+      btn.appendChild(circulo);
+      circulo.addEventListener("animationend", () => circulo.remove());
+    }
+
+    const ctaBtn = document.getElementById("cta-btn");
+    if (ctaBtn) ctaBtn.addEventListener("click", criarRipple);
+
+    /* ==============================================================
+       INICIALIZAR
+    ============================================================== */
+    criarAccordion();
+    carregarGaleria();
+  </script>
+</body>
+</html>
