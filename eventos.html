@@ -8,6 +8,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cinzel+Decorative:wght@400;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
 
+  <link rel="stylesheet" href="css/global.css" />
+  <link rel="stylesheet" href="css/clickParticles.css">
   <style>
     /* ============================================================
        RESET & BASE
@@ -963,7 +965,7 @@
        HERO
   ============================================================ -->
   <section class="hero">
-    <span class="hero-cross">✝</span>
+    <img class="hero-cross-img" src="https://res.cloudinary.com/dx1nhcbhb/image/upload/v1785333994/ChatGPT_Image_29_de_jul._de_2026__11_06_00-removebg-preview_xusrme.png" alt="">
     <p class="hero-eyebrow">Comunidade Nossa Senhora dos Navegantes</p>
     <h1 class="hero-title">Eventos</h1>
     <p class="hero-subtitle">Celebrações, Missas e Encontros da Nossa Comunidade</p>
@@ -1041,11 +1043,72 @@
        FOOTER
   ============================================================ -->
   <footer>
-    <span class="footer-cross">✝</span>
-    <p class="footer-brand">Acólitos</p>
-    <p class="footer-sub">Comunidade Nossa Senhora dos Navegantes</p>
-    <div class="footer-divider"></div>
-    <p class="footer-copy">&copy; <span id="footerYear"></span> — Todos os direitos reservados · In Nomine Domini</p>
+    <div class="footer-ornament">
+      <div class="line"></div>
+      <svg class="footer-cross-sm" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="14" y="2" width="8" height="32" rx="2" fill="#c9a84c" opacity="0.7"/>
+        <rect x="2" y="10" width="32" height="8" rx="2" fill="#c9a84c" opacity="0.7"/>
+      </svg>
+      <div class="line right"></div>
+    </div>
+
+    <div class="footer-grid">
+
+      <div class="footer-col">
+        <h3>Nossa Comunidade</h3>
+        <p>Os Acólitos são jovens dedicados ao serviço do altar, auxiliando nas celebrações litúrgicas e vivendo a fé com alegria e comprometimento.</p>
+        <br>
+        <address>
+          <span>Comunidade Nossa Senhora dos Navegantes</span>
+          <span>Espinheiros - Joinville — Santa Catarina</span>
+          <span>Brasil</span>
+        </address>
+      </div>
+
+      <div class="footer-col">
+        <h3>Links Úteis</h3>
+        <ul>
+          <li><a href="eventos.html">Início</a></li>
+          <li><a href="acólitosNav.html">Membros</a></li>
+          <li><a href="eventos.html">Eventos e Missas</a></li>
+          <li><a href="galeria.html">Galeria de Fotos</a></li>
+          <li><a href="contatos.html">Contato</a></li>
+          <li><a href="qrs_acolito.html">Quero ser Acólito</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h3>Horários</h3>
+        <div class="horarios">
+          <div class="horario-item">
+            <span class="dia">Domingo</span>
+            <span class="hora"></span>
+          </div>
+          <div class="horario-item">
+            <span class="dia">Segunda (Encontro)</span>
+            <span class="hora">19:30</span>
+          </div>
+          <div class="horario-item">
+            <span class="dia">Quarta</span>
+            <span class="hora"></span>
+          </div>
+          <div class="horario-item">
+            <span class="dia">Sexta</span>
+            <span class="hora"></span>
+          </div>
+          <div class="horario-item">
+            <span class="dia">Sábado (Santa Missa)</span>
+            <span class="hora">19:30h</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2026 Acólitos — N. Sra. dos Navegantes &nbsp;·&nbsp; <span>Joinville, SC</span></p>
+      <p class="footer-bottom-right">Ad Maiorem Dei Gloriam</p>
+    </div>
   </footer>
 
 </div><!-- /page-wrapper -->
@@ -1053,6 +1116,8 @@
 <!-- ============================================================
      MODAL DE EVENTO
 ============================================================ -->
+<script src="js/app.js"></script>
+<script src="js/utils.js"></script>
 <div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-label="Detalhes do evento">
   <div class="modal-box" id="modalBox">
     <button class="modal-close" id="modalClose" aria-label="Fechar">✕</button>
@@ -1153,7 +1218,10 @@
   /* ==============================================================
      FOOTER ANO
   ============================================================== */
-  document.getElementById("footerYear").textContent = new Date().getFullYear();
+  (function(){
+    const _fy = document.getElementById("footerYear");
+    if (_fy) _fy.textContent = new Date().getFullYear();
+  })();
 
   /* ==============================================================
      NORMALIZAR EVENTO
@@ -1536,5 +1604,6 @@
   ============================================================== */
   carregarEventos();
 </script>
+<script src="js/clickParticles.js"></script>
 </body>
 </html>

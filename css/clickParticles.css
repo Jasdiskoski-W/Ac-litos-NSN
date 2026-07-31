@@ -1,0 +1,44 @@
+/* clickParticles.css
+   Styling for the click particle elements. Kept minimal and scoped.
+*/
+
+:root {
+  --click-particle-z: 9999;
+}
+
+.click-particles-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: var(--click-particle-z);
+  overflow: visible;
+}
+
+.click-particle {
+  position: absolute;
+  pointer-events: none;
+  width: var(--size, 6px);
+  height: var(--size, 6px);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) translate(0, 0) scale(1);
+  opacity: 1;
+  will-change: transform, opacity;
+  animation: cp-move var(--duration, 600ms) cubic-bezier(.2, .8, .2, 1) forwards;
+  mix-blend-mode: screen;
+}
+
+@keyframes cp-move {
+  0% {
+    transform: translate(-50%, -50%) translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) translate(var(--tx, 0px), var(--ty, 0px)) scale(0.1);
+    opacity: 0;
+  }
+}
+
+/* Reduced motion users: make effect immediate and short */
+@media (prefers-reduced-motion: reduce) {
+  .click-particle { animation-duration: 150ms !important; }
+}

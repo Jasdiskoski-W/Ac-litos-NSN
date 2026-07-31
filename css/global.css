@@ -1,0 +1,104 @@
+/* Global shared variables and minimal base used across pages
+   Conservative: only defines color variables, reset, body/bg and
+   footer/base ornaments used by multiple pages. Inline page-specific
+   rules remain in their HTML to avoid visual regressions. */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --azul-noite:   #07101e;
+  --azul-medio:   #0d1f38;
+  --azul-claro:   #162d52;
+  --ouro:         #c9a84c;
+  --ouro-claro:   #e8cc7a;
+  --ouro-brilho:  #fff0b0;
+  --pergaminho:   #f5f0e8;
+  --vinho:        #6b1a2c;
+  --vinho-claro:  #8c2240;
+  --branco:       #ffffff;
+  --cinza-claro:  #c8cdd8;
+  --cinza:        #8892a0;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  min-height: 100vh;
+  background: var(--azul-noite);
+  font-family: 'Inter', sans-serif;
+  color: var(--pergaminho);
+  overflow-x: hidden;
+}
+
+/* Particles canvas minimal baseline (pages use varying ids) */
+#particles-canvas, #particlesCanvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+
+/* Top ornament stripe used in multiple pages */
+.border-top {
+  position: fixed; top: 0; left: 0; right: 0; height: 4px;
+  background: linear-gradient(90deg, transparent, var(--ouro), var(--ouro-brilho), var(--ouro), transparent);
+  z-index: 100;
+}
+
+/* Shared ornament divider */
+.ornament-divider { display:flex; align-items:center; justify-content:center; gap:16px; max-width:480px; margin: 0 auto; }
+.ornament-divider .line { flex:1; height:1px; background: linear-gradient(90deg, transparent, var(--ouro), transparent); }
+.ornament-divider .diamond { width:8px; height:8px; background:var(--ouro); transform:rotate(45deg); flex-shrink:0; }
+.ornament-divider .diamond-sm { width:4px; height:4px; background:var(--ouro-claro); transform:rotate(45deg); flex-shrink:0; }
+
+/* Shared nav appearance (base) */
+nav { display:flex; justify-content:center; gap:8px; flex-wrap:wrap; }
+nav a { font-family: 'Cinzel', serif; font-size:0.8rem; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; text-decoration:none; color:var(--cinza-claro); padding:10px 22px; border:1px solid rgba(201,168,76,0.25); border-radius:2px; transition:all .3s ease; position:relative; overflow:hidden; }
+nav a::before { content:''; position:absolute; inset:0; background: linear-gradient(135deg, rgba(201,168,76,0.08), rgba(201,168,76,0.02)); opacity:0; transition:opacity .3s; }
+nav a:hover, nav a.active { color: var(--ouro-brilho); border-color: var(--ouro); box-shadow: 0 0 20px rgba(201,168,76,0.2), inset 0 0 20px rgba(201,168,76,0.05); }
+nav a:hover::before, nav a.active::before { opacity:1; }
+
+/* Footer shared styles (copied conservatively from acólitosNav.html) */
+footer { position: relative; z-index: 10; background: linear-gradient(180deg, transparent 0%, rgba(4,8,16,0.8) 30%, #040810 100%); border-top: 1px solid rgba(201,168,76,0.2); padding: 0 20px; }
+.footer-ornament { display:flex; align-items:center; justify-content:center; gap:20px; padding:32px 20px 0; margin-bottom:40px; }
+.footer-ornament .line { flex:1; max-width:200px; height:1px; background: linear-gradient(90deg, transparent, rgba(201,168,76,0.4)); }
+.footer-ornament .line.right { background: linear-gradient(90deg, rgba(201,168,76,0.4), transparent); }
+.footer-cross-sm { width:36px; height:36px; filter: drop-shadow(0 0 12px rgba(201,168,76,0.5)); }
+.footer-grid { max-width:1100px; margin:0 auto; display:grid; grid-template-columns:1.6fr 1fr 1fr; gap:48px; padding-bottom:40px; }
+.footer-col h3 { font-family: 'Cinzel', serif; font-size:0.72rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--ouro); margin-bottom:18px; padding-bottom:10px; border-bottom:1px solid rgba(201,168,76,0.2); }
+.footer-col p, .footer-col address { font-size:0.84rem; line-height:1.9; color:var(--cinza); }
+.footer-col ul { list-style:none; }
+.footer-col ul li { margin-bottom:10px; }
+.footer-col ul li a { font-size:0.84rem; color:var(--cinza); text-decoration:none; transition:color .3s; display:flex; align-items:center; gap:8px; }
+.footer-col ul li a::before { content:'›'; color:var(--ouro); font-size:1rem; opacity:.6; }
+.footer-col ul li a:hover { color: var(--ouro-claro); }
+.horarios { display:flex; flex-direction:column; gap:6px; }
+.horario-item { display:flex; justify-content:space-between; font-size:0.82rem; color:var(--cinza); padding-bottom:6px; border-bottom:1px solid rgba(255,255,255,0.05); }
+.horario-item .dia { color:var(--cinza-claro); font-weight:500; }
+.horario-item .hora { color:var(--ouro); opacity:0.8; }
+.footer-bottom { max-width:1100px; margin:0 auto; padding:20px 0 28px; border-top:1px solid rgba(255,255,255,0.06); display:flex; justify-content:space-between; align-items:center; gap:20px; flex-wrap:wrap; }
+.footer-bottom p { font-size:0.75rem; color:var(--cinza); opacity:0.65; letter-spacing:0.05em; }
+.footer-bottom p span { color:var(--ouro); opacity:1; }
+.footer-bottom-right { font-family: 'Cinzel', serif; font-size:0.65rem; letter-spacing:0.2em; color:var(--ouro); opacity:0.45; text-transform:uppercase; }
+
+/* Small helpers for inserted logo images used to replace crosses */
+.header-logo-img, .hero-cross-img, .header-cross-img {
+  display: block;
+  margin: 0 auto 20px;
+  width: 120px;
+  height: auto;
+}
+.footer-cross-img { width: 36px; height: auto; }
+
+@media (max-width: 768px) {
+  .header-logo-img, .hero-cross-img, .header-cross-img { width: 120px; }
+}
+
+/* Ensure footer stacks on small screens for pages that lacked the
+   page-specific responsive override (fixes biblioteca.html & eventos.html) */
+@media (max-width: 768px) {
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    text-align: center;
+  }
+}
